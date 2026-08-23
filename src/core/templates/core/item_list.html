@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Inventario de Laboratorio V2{% endblock %}
+
+{% block content %}
+    <h1>Listado de Ítems de Inventario</h1>
+
+    <!-- Interactividad: Buscador JS (sin bordes azules) -->
+    <input type="text" id="searchInputV2" class="interactive-search-box" placeholder="Buscar por nombre o descripción...">
+
+    <ul id="itemsListV2" class="item-list-container">
+        {% for item in items %}
+            <li class="list-item-row">
+                <div class="list-item-title">{{ item.name }}</div>
+                <div class="list-item-description">{{ item.description }}</div>
+                <div class="list-item-timestamp">Registrado: {{ item.created_at|date:"d/m/Y H:i" }}</div>
+            </li>
+        {% empty %}
+            <li class="list-empty-message">No se encontraron ítems en el inventario actual.</li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        // JS para filtrar la lista en tiempo real
+        document.getElementById('searchInputV2').addEventListener('keyup', function() {
+            let filterValue = this.value.toLowerCase();
+            let rows = document.querySelectorAll('.list-item-row');
+
+            rows.forEach(row => {
+                let rowTextContent = row.textContent.toLowerCase();
+                row.style.display = rowTextContent.includes(filterValue) ? '' : 'none';
+            });
+        });
+    </script>
+{% endblock %}
