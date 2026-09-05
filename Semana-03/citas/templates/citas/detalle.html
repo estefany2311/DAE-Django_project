@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0 fw-bold">Detalle de la Cita #{{ cita.id }}</h5>
+                    <span class="badge 
+                        {% if cita.estado == 'PENDIENTE' %}bg-warning text-dark
+                        {% elif cita.estado == 'CONFIRMADA' %}bg-primary
+                        {% elif cita.estado == 'COMPLETADA' %}bg-success
+                        {% else %}bg-danger{% endif %} fs-6">
+                        {{ cita.estado }}
+                    </span>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="text-muted small fw-bold">PACIENTE</label>
+                            <p class="fs-5 mb-0 fw-semibold">{{ cita.paciente_nombre }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small fw-bold">TELÉFONO DE CONTACTO</label>
+                            <p class="fs-5 mb-0">{{ cita.paciente_telefono }}</p>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="text-muted small fw-bold">FECHA Y HORA PROGRAMADA</label>
+                            <p class="fs-5 mb-0">{{ cita.fecha_hora }}</p>
+                        </div>
+                    </div>
+
+                    <hr class="my-3">
+
+                    <div class="mb-4">
+                        <label class="text-muted small fw-bold mb-2">MOTIVO DE CONSULTA CLÍNICA</label>
+                        <div class="p-3 bg-light rounded border border-1 text-dark fs-6">
+                            {{ cita.motivo_consulta }}
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'lista_citas' %}" class="btn btn-secondary px-4">
+                            Volver al listado
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
