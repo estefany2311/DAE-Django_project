@@ -1,30 +1,36 @@
-# 🐾 Sistema de Gestión Veterinaria 
+# 🐾 Sistema de Gestión Veterinaria - Django Admin Laboratorio 05
 
-
- Este sistema gestiona el flujo operativo de una clínica veterinaria aplicando persistencia con **Django ORM**, base de datos **SQLite**, y una interfaz moderna con **Bootstrap 5**.
-
----
-
-##  Resumen del Laboratorio 
-
-### Integridad de Base de Datos y Modelado
-- Definición de relaciones clave del dominio veterinario:
-  - **1:1 (`OneToOneField`)**: `PerfilVeterinario` con `User` y `FichaMedica` con `Mascota`.
-  - **1:N (`ForeignKey`)**: `Especie` a `Mascota`, y `Mascota`/`PerfilVeterinario` a `CitaMedica`.
-  - **N:M (`ManyToManyField` con `through`)**: `CitaMedica` e `Insumo` a través del modelo intermedio `DetalleReceta`.
-
-### Diseño e Interfaz UI/UX con Bootstrap 5
-- Migración de vistas básicas HTML a un diseño web profesional utilizando **Bootstrap 5 (CSS, JS e Icons)**.
-- Implementación de plantillas reutilizables (`base.html`), barras de navegación responsivas, tablas estilizables y formularios interactivos (`*_form.html`, `*_list.html`).
-
-###  Ciclo de Vida CRUD en Relación N:M
-- Implementación de operaciones completas sobre la tabla intermedia `DetalleReceta`:
-  - **Agregar**: Vincular un insumo a una cita médica definiendo **atributos propios** (`cantidad` e `indicaciones_uso`).
-  - **Modificar**: Actualizar la dosis o las indicaciones de uso de un detalle de receta existente.
-  - **Quitar**: Eliminar la prescripción de un insumo dentro de una cita médica sin alterar los registros base de `CitaMedica` ni de `Insumo`.
+Proyecto desarrollado en Django para la gestión operativa y clínica de una veterinaria. En esta entrega se implementó la configuración avanzada del panel de administración nativo (**Django Admin**) para la gestión de entidades relacionales sin la necesidad de vistas front-end adicionales.
 
 ---
 
-## Diagrama Entidad-Relación:
-<img width="1232" height="1078" alt="Captura de pantalla 2026-09-13 193354" src="https://github.com/user-attachments/assets/4e4af117-4c92-412b-9077-84bcd65f2cad" />
+## Estructura del Dominio 
 
+El modelo de datos está conformado por las siguientesentidades y sus respectivas relaciones relacionales:
+
+1. **`Especie`**: Clasificación de animales (Canino, Felino, etc.).
+2. **`Insumo`**: Productos de la farmacia veterinaria y medicamentos.
+3. **`Servicio`**: Servicios médicos ofrecidos por la clínica.
+4. **`Mascota`**: Datos principales de los pacientes (nombre, edad y dueño).
+5. **`HistorialMedico`**: Registro clínico e historial de intervenciones.
+6. **`PerfilVeterinario`**: Información del personal veterinario y colegiatura.
+7. **`FichaMedica`**: Ficha técnica con chip, alergias y grupo sanguíneo.
+8. **`CitaMedica`**: Registro de consultas, fechas y estados del turno.
+9. **`DetalleReceta`**: Modelo intermedio (**Relación N:M entre `CitaMedica` e `Insumo`**) con atributos de cantidad e indicaciones.
+10. **`Factura`**: Comprobantes de pago por atención o servicios.
+---
+
+## Configuración del Panel de Administración (`admin.py`)
+
+La gestión administrativa fue personalizada utilizando herramientas avanzadas de `django.contrib.admin`:
+
+### 1. Personalización de Vistas con `ModelAdmin`
+* **`list_display`**: Configurado en `Mascota`, `CitaMedica`, `PerfilVeterinario`, `Insumo` y `Factura` para mostrar información estructurada en columnas.
+* **`search_fields`**: Búsqueda dinámica en tiempo real por nombre de mascota, dueño, colegiatura, especialidad o motivo de consulta.
+* **`list_filter`**: Filtros laterales para clasificar citas por `estado` o `fecha_hora`, y profesionales por `especialidad`.
+
+### 2. Formulario Integrado con Inlines
+* **`StackedInline` (Relación 1:1)**: Se implementó `FichaMedicaInline` dentro de `MascotaAdmin` para visualizar y editar el expediente clínico directamente en el formulario de la mascota.
+* **`TabularInline` (Relación N:M)**: Se implementó `DetalleRecetaInline` dentro de `CitaMedicaAdmin` para prescribir insumos en formato de tabla dentro de la misma vista de la cita.
+
+---
