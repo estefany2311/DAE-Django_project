@@ -1,0 +1,64 @@
+{# Herencia de la plantilla maestra base.html #}
+{% extends 'veterinaria/base.html' %}
+
+{# Define el titulo de la pestaña en el navegador #}
+{% block title %}Mascotas - Clínica Veterinaria{% endblock %}
+
+{# Inicia el bloque de contenido principal que se inyecta en base.html #}
+{% block content %}
+
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Mascotas</h1>
+    <a class="btn btn-success" href="{% url 'crear_mascota' %}">Nueva mascota</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Edad</th>
+                    <th>Dueño</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {# Bucle para iterar las mascotas enviadas desde la View #}
+                {% for mascota in mascotas %}
+                <tr>
+                    {# (Filtro 1): |upper convierte el nombre a MAYÚSCULAS #}
+                    <td><strong>{{ mascota.nombre|upper }}</strong></td>
+                    
+                    <td>{{ mascota.edad }} años</td>
+                    
+                    {# (Filtro 2): |title asegura formato de Inicial Mayúscula #}
+                    <td>{{ mascota.dueno_nombre|title }}</td>
+                    
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-primary" href="{% url 'editar_mascota' mascota.pk %}">Editar</a>
+                        
+                        {# Comentario en servidor sobre borrado seguro #}
+                        {% comment %}
+                            Formulario inline para borrado directo. Se utiliza el método POST 
+                            junto con el token {% csrf_token %} para evitar vulnerabilidades CSRF 
+                            y prevenir eliminaciones mediante peticiones GET no autorizadas.
+                        {% endcomment %}
+                        <form class="d-inline" method="post" action="{% url 'eliminar_mascota' mascota.pk %}">
+                            {% csrf_token %}
+                            <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar a esta mascota?');">
+                                Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                {# Reutilización de fragmento externo mediante {% include %} #}
+                {% include 'veterinaria/includes/_tabla_vacia.html' with columnas=4 %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

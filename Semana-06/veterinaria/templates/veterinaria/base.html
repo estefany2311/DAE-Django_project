@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}VetCare - Sistema de Gestión Veterinaria{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <style>
+        .custom-navbar {
+            background: linear-gradient(135deg, #0f5132 0%, #198754 100%);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+            font-weight: 500;
+            border-radius: 6px;
+            padding: 8px 12px !important;
+        }
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+        .navbar-brand {
+            font-size: 1.35rem;
+            letter-spacing: -0.5px;
+        }
+    </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <!-- Navegación principal -->
+    <nav class="navbar navbar-expand-lg navbar-dark custom-navbar py-2 mb-4 sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{% url 'lista_mascotas' %}">
+                <i class="bi bi-heart-pulse-fill text-warning fs-4"></i>
+                <span>Pet Care<span class="fw-light fs-6 opacity-75"> | Clínica</span></span>
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto ms-lg-3 gap-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-white d-flex align-items-center gap-1" href="{% url 'lista_especies' %}">
+                            <i class="bi bi-tags-fill"></i> Especies
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white d-flex align-items-center gap-1" href="{% url 'lista_insumos' %}">
+                            <i class="bi bi-box-seam-fill"></i> Insumos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white d-flex align-items-center gap-1" href="{% url 'lista_servicios' %}">
+                            <i class="bi bi-bandaid-fill"></i> Servicios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white d-flex align-items-center gap-1" href="{% url 'lista_mascotas' %}">
+                            <i class="bi bi-github"></i> Mascotas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white d-flex align-items-center gap-1" href="{% url 'lista_historiales' %}">
+                            <i class="bi bi-journal-medical"></i> Historial médico
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white d-flex align-items-center gap-1" href="{% url 'cita_list' %}">
+                            <i class="bi bi-calendar-event-fill"></i> Citas Médicas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white d-flex align-items-center gap-1" href="{% url 'receta_list' %}">
+                            <i class="bi bi-file-earmark-medical-fill"></i> Recetas Médicas
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido dinámico principal -->
+    <main class="container my-3 flex-grow-1">
+
+        <!-- Mensajes de notificación (Alerts de Django) -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i> {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% else %}
+            <!-- Nota del sistema cuando no hay alertas pasadas desde views.py -->
+            <div class="alert alert-primary shadow-sm py-2 mb-4" role="alert">
+                <small><strong>Nota del sistema:</strong> Estás visualizando los registros actualizados de la clínica veterinaria.</small>
+            </div>
+        {% endif %}
+
+        {% block content %}
+        <!-- Contenido inyectado desde plantillas hijas -->
+        {% endblock %}
+    
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="bg-white text-center py-3 border-top mt-auto shadow-sm">
+        <div class="container text-muted d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+            <small>&copy; 2026 <strong>Pet Care Hospital Veterinario</strong>. Todos los derechos reservados.</small>
+            <small><i class="bi bi-telephone-fill text-success me-1"></i> Emergencias 24/7: (01) 800-PETCARE</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

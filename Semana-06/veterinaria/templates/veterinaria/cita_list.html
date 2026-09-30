@@ -1,0 +1,41 @@
+{% extends 'veterinaria/base.html' %}
+
+{% block title %}Citas Médicas{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Citas Médicas</h1>
+    {# Se cambió 'cita_create' por 'crear_cita' según urls.py #}
+    <a class="btn btn-success" href="{% url 'crear_cita' %}">Nueva Cita</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Mascota</th>
+                    <th>Veterinario</th>
+                    <th>Fecha y Hora</th>
+                    <th>Estado</th>
+                    <th>Motivo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cita in citas %}
+                <tr>
+                    <td>{{ cita.mascota.nombre }}</td>
+                    <td>{{ cita.veterinario }}</td>
+                    <td>{{ cita.fecha_hora }}</td>
+                    <td><span class="badge bg-info text-dark">{{ cita.estado }}</span></td>
+                    <td>{{ cita.motivo }}</td>
+                </tr>
+                {% empty %}
+                {# Inclusión del fragmento de tabla vacía de la semana #}
+                {% include 'veterinaria/includes/_tabla_vacia.html' with columnas=5 %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
